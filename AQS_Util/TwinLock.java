@@ -4,8 +4,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
+
+
+/**
+ * 
+ * @author tlm
+ *
+ */
 public class TwinLock implements Lock {
 
 	private static class Sync extends AbstractQueuedSynchronizer {
@@ -42,13 +48,18 @@ public class TwinLock implements Lock {
 
 	}
 
-	private final Sync sync = new Sync(2);
+	private final Sync sync = new Sync(5);
 
 	@Override
 	public void lock() {
 		sync.acquireShared(1);
 	}
 
+	@Override
+	public void unlock() {
+		sync.releaseShared(1);
+	}
+	
 	@Override
 	public void lockInterruptibly() throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -72,14 +83,16 @@ public class TwinLock implements Lock {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public void unlock() {
-		sync.releaseShared(1);
-	}
-
+	
+	/**
+	 * 用来统计打印次数的变量，可删去
+	 */
 	public int count = 0;
-
+	
+	/**
+	 * 用来测试TwinLock类的main方法
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		final TwinLock lock = new TwinLock();
 		final Object object = new Object();
@@ -92,9 +105,12 @@ public class TwinLock implements Lock {
 					try {
 						Thread.sleep(1000);
 						System.out.println(Thread.currentThread().getName() + ":" + lock.count);
+						
+						//进行打印次数的统计，可删去
 						synchronized (object) {
 							lock.count++;
 						}
+						
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
