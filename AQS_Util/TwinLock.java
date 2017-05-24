@@ -17,7 +17,7 @@ public class TwinLock implements Lock {
 
 	private static class Sync extends AbstractQueuedSynchronizer {
 
-		public Sync(int count) {
+		private Sync(int count) {
 			if (count > 0) {
 				setState(count);
 			} else {
