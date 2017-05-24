@@ -7,6 +7,8 @@ import java.util.concurrent.locks.Lock;
 
 
 /**
+ * 同一时刻允许两个线程访问的共享锁，资源数定义为2。
+ * 可修改资源数的定义count来进行共享锁的定制。
  * 
  * @author tlm
  *
@@ -15,9 +17,9 @@ public class TwinLock implements Lock {
 
 	private static class Sync extends AbstractQueuedSynchronizer {
 
-		public Sync(int num) {
-			if (num > 0) {
-				setState(num);
+		public Sync(int count) {
+			if (count > 0) {
+				setState(count);
 			} else {
 				System.out.println("count must larger than 0.");
 			}
@@ -47,7 +49,7 @@ public class TwinLock implements Lock {
 
 	}
 
-	private final Sync sync = new Sync(5);
+	private final Sync sync = new Sync(2);
 
 	@Override
 	public void lock() {
