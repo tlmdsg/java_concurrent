@@ -84,7 +84,7 @@ public class TwinLock implements Lock {
 	/**
 	 * 用来统计打印次数的变量，可删去
 	 */
-	public int count = 0;
+	public static int count = 0;
 	
 	/**
 	 * 用来测试TwinLock类的main方法
@@ -101,11 +101,11 @@ public class TwinLock implements Lock {
 					lock.lock();
 					try {
 						Thread.sleep(1000);
-						System.out.println(Thread.currentThread().getName() + ":" + lock.count);
+						System.out.println(Thread.currentThread().getName() + ":" + count);
 						
 						//进行打印次数的统计，可删去
 						synchronized (object) {
-							lock.count++;
+							count++;
 						}
 						
 						Thread.sleep(1000);
